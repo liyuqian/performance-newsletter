@@ -13,7 +13,7 @@ function generateNewsletter() {
   appendOtherItems(body, responseItems);
 }
 
-function appendOtherItems(body, responseItems) {
+function appendOtherItems(body: GoogleAppsScript.Document.Body, responseItems: ResponseItem[]) {
   let header = body.appendParagraph('Other improvements');
   header.setHeading(DocumentApp.ParagraphHeading.HEADING2);
 
@@ -34,7 +34,7 @@ function appendOtherItems(body, responseItems) {
   }
 }
 
-function appendQuantifiedItems(body, responseItems) {
+function appendQuantifiedItems(body: GoogleAppsScript.Document.Body, responseItems: ResponseItem[]) {
   let quantifiedHeader = body.appendParagraph('Quantified improvements');
   quantifiedHeader.setHeading(DocumentApp.ParagraphHeading.HEADING2);
 
@@ -68,7 +68,24 @@ function appendQuantifiedItems(body, responseItems) {
 }
 
 class ResponseItem {
-  constructor(row) {
+  timestamp: string;
+  email: string;
+  shortDescription: string;
+  landDate: string;
+  perfArea: string;
+  commits: string[];
+  firstAuthor: string;
+  otherAuthors: string[];
+  issues: string[];
+  docLink: string;
+  isQuantified: boolean;
+  oldMetric: number;
+  newMetric: number;
+  unit: string;
+  metricDescription: string;
+  metricLink: string;
+
+  constructor(row: any[]) {
     if (row.length != kColCount) {
       throw `Row length ${row.length} does not match kColCount = ${kColCount} for row = ${row}`;
     }
@@ -91,18 +108,18 @@ class ResponseItem {
   }
 }
 
-function s(list) { return list.length > 1 ? 's' : ''; }
-function abs(x) { return x < 0 ? -x : x; }
+function s(list: any[]): string { return list.length > 1 ? 's' : ''; }
+function abs(x: number): number { return x < 0 ? -x : x; }
 
-function splitLines(lines) {
-  return lines.split(/\r?\n/).filter(line => line.trim() != '');
+function splitLines(lines): string[] {
+  return lines.split(/\r?\n/).filter((line: string) => line.trim() != '');
 }
 
-function trimAtGoogle(s) {
+function trimAtGoogle(s: string): string {
   return s.replace('@google.com', '').replace('@google', '');
 }
 
-function shortenCommit(commitUrl) {
+function shortenCommit(commitUrl: string): string {
   let sha1Match = commitUrl.match(/\/([0-9a-f]{40})/);
   if (sha1Match != null) {
     return sha1Match[1].substring(0, 7);
@@ -114,7 +131,7 @@ function shortenCommit(commitUrl) {
   throw `Unrecognized commit url ${commitUrl}`;
 }
 
-function shortenIssue(issueUrl) {
+function shortenIssue(issueUrl: string): string {
   let corpIssueMatch = issueUrl.match(/b.corp.google.com\/(issues\/)?([0-9]+)/);
   if (corpIssueMatch != null) {
     return `b/${corpIssueMatch[2]}`;
@@ -135,7 +152,7 @@ function shortenIssue(issueUrl) {
 }
 
 // May return positive or negative numbers for increasing or decreasing changes.
-function computeChangePercentage(responseItem) {
+function computeChangePercentage(responseItem: ResponseItem): number {
   var oldNum = responseItem.oldMetric;
   var newNum = responseItem.newMetric;
   if (kTimeUnits.includes(responseItem.unit)) {
@@ -145,18 +162,18 @@ function computeChangePercentage(responseItem) {
   return (newNum / oldNum - 1) * 100;
 }
 
-function createDoc() {
-  var folder = DriveApp.getFolderById(kNewsletterFolderId);
-  var filename = `Generated Newsletter ${Date()}`;
+function createDoc(): GoogleAppsScript.Document.Document {
+  let folder = DriveApp.getFolderById(kNewsletterFolderId);
+  let filename = `Generated Newsletter ${Date()}`;
 
   Logger.log("Creating %s", filename);
-  var doc = DocumentApp.create(filename);
-  var docFile = DriveApp.getFileById(doc.getId());
+  let doc = DocumentApp.create(filename);
+  let docFile = DriveApp.getFileById(doc.getId());
   Logger.log(`Adding ${filename} to folder ${folder.getName()}`)
   folder.addFile(docFile);
-  var parentIterator = docFile.getParents();
+  let parentIterator = docFile.getParents();
   while (parentIterator.hasNext()) {
-    var parent = parentIterator.next();
+    let parent = parentIterator.next();
     if (parent.getId() != folder.getId()) {
       Logger.log(`Removing ${filename} from folder ${parent.getName()}`)
       parent.removeFile(docFile);
@@ -165,7 +182,7 @@ function createDoc() {
   return doc;
 }
 
-function readResponses() {
+function readResponses(): ResponseItem[] {
   let ss = SpreadsheetApp.openById(kFormSpreadsheetId);
   let responseSheet = ss.getSheetByName(kSheetName);
   let range = responseSheet.getRange(2, 1, responseSheet.getMaxRows(), kColCount);
@@ -184,7 +201,7 @@ function readResponses() {
   return responseItems;
 }
 
-function appendAuthors(listItem, responseItem, highlighted = true) {
+function appendAuthors(listItem: GoogleAppsScript.Document.ListItem, responseItem: ResponseItem, highlighted = true): void {
     listItem.appendText('\n');
     let allAuthors = [responseItem.firstAuthor].concat(responseItem.otherAuthors);
     let shortenedAuthors = allAuthors.map((s) => s.replace('@google.com', '@'));
@@ -195,7 +212,7 @@ function appendAuthors(listItem, responseItem, highlighted = true) {
     }
 }
 
-function appendCommitsSubItem(body, responseItem) {
+function appendCommitsSubItem(body: GoogleAppsScript.Document.Body, responseItem: ResponseItem): void {
   let commitsSubItem = body.appendListItem(`Commit${s(responseItem.commits)}:`);
   commitsSubItem.setNestingLevel(1);
   for (var commitIndex = 0; commitIndex < responseItem.commits.length; commitIndex += 1) {
@@ -208,7 +225,7 @@ function appendCommitsSubItem(body, responseItem) {
   commitsSubItem.setGlyphType(DocumentApp.GlyphType.HOLLOW_BULLET);
 }
 
-function appendMetricSubItem(body, responseItem, changePercentage, formattedPercentage) {
+function appendMetricSubItem(body: GoogleAppsScript.Document.Body, responseItem: ResponseItem, changePercentage: number, formattedPercentage: string): void {
   let isTime = kTimeUnits.includes(responseItem.unit);
   let increaseOrReduction = changePercentage > 0 ? 'increase' : 'reduction';
   let direction = isTime ? 'speedup' : increaseOrReduction;
@@ -223,7 +240,7 @@ function appendMetricSubItem(body, responseItem, changePercentage, formattedPerc
   metricSubItem.setGlyphType(DocumentApp.GlyphType.HOLLOW_BULLET);
 }
 
-function appendIssuesSubItem(body, responseItem) {
+function appendIssuesSubItem(body: GoogleAppsScript.Document.Body, responseItem: ResponseItem): void {
   if (responseItem.issues.length == 0) {
     return;
   }
@@ -239,7 +256,7 @@ function appendIssuesSubItem(body, responseItem) {
   issuesSubItem.setGlyphType(DocumentApp.GlyphType.HOLLOW_BULLET);
 }
 
-function appendDocLink(body, responseItem) {
+function appendDocLink(body: GoogleAppsScript.Document.Body, responseItem: ResponseItem): void {
   if (responseItem.docLink == null || responseItem.docLink.trim() == '') {
     return;
   }
