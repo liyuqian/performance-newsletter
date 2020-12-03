@@ -23,7 +23,6 @@ function appendOtherItems(body, responseItems) {
       continue;
     }
 
-    // TODO perf area
     let listItem = body.appendListItem(`[${responseItem.perfArea.toLowerCase()}] ${responseItem.shortDescription}`);
     appendAuthors(listItem, responseItem, false);
     appendCommitsSubItem(body, responseItem);
@@ -182,7 +181,7 @@ function readResponses() {
     // Logger.log("row %d has %d columns", r, row.length);
     // Logger.log("  columns: %s", responseValues[r].join(', '));
   }
-  return responseItems;  
+  return responseItems;
 }
 
 function appendAuthors(listItem, responseItem, highlighted = true) {
