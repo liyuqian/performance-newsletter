@@ -1,3 +1,5 @@
+import {shortenIssue, shortenCommit} from './doc';
+
 function testAll() {
   testShortenIssue();
   testShortenCommit();

@@ -132,10 +132,10 @@ function splitLines(lines): string[] {
 }
 
 function trimAtGoogle(s: string): string {
-  return s.replace('@google.com', '').replace('@google', '');
+  return s.replace('@google.com', '@').replace('@google', '@');
 }
 
-function shortenCommit(commitUrl: string): string {
+export function shortenCommit(commitUrl: string): string {
   let sha1Match = commitUrl.match(/\/([0-9a-f]{40})/);
   if (sha1Match != null) {
     return sha1Match[1].substring(0, 7);
@@ -147,7 +147,7 @@ function shortenCommit(commitUrl: string): string {
   throw `Unrecognized commit url ${commitUrl}`;
 }
 
-function shortenIssue(issueUrl: string): string {
+export function shortenIssue(issueUrl: string): string {
   let corpIssueMatch = issueUrl.match(/b.corp.google.com\/(issues\/)?([0-9]+)/);
   if (corpIssueMatch != null) {
     return `b/${corpIssueMatch[2]}`;
@@ -226,7 +226,7 @@ function appendAuthors(
 ): void {
   listItem.appendText('\n');
   let allAuthors = [responseItem.firstAuthor].concat(responseItem.otherAuthors);
-  let shortenedAuthors = allAuthors.map((s) => s.replace('@google.com', '@'));
+  let shortenedAuthors = allAuthors.map(trimAtGoogle);
   let authorsText = listItem.appendText(shortenedAuthors.join(', '));
   authorsText.setItalic(true);
   if (highlighted) {
