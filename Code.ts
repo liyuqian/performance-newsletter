@@ -13,7 +13,10 @@ function generateNewsletter() {
   appendOtherItems(body, responseItems);
 }
 
-function appendOtherItems(body: GoogleAppsScript.Document.Body, responseItems: ResponseItem[]) {
+function appendOtherItems(
+  body: GoogleAppsScript.Document.Body,
+  responseItems: ResponseItem[],
+): void {
   let header = body.appendParagraph('Other improvements');
   header.setHeading(DocumentApp.ParagraphHeading.HEADING2);
 
@@ -23,18 +26,25 @@ function appendOtherItems(body: GoogleAppsScript.Document.Body, responseItems: R
       continue;
     }
 
-    let listItem = body.appendListItem(`[${responseItem.perfArea.toLowerCase()}] ${responseItem.shortDescription}`);
+    let listItem = body.appendListItem(
+      `[${responseItem.perfArea.toLowerCase()}] ` +
+      `${responseItem.shortDescription}`,
+    );
     appendAuthors(listItem, responseItem, false);
     appendCommitsSubItem(body, responseItem);
     appendIssuesSubItem(body, responseItem);
     appendDocLink(body, responseItem);
 
-    // List item glyph types must be set in the end. Otherwise they might be overwritten.
+    // List item glyph types must be set in the end. Otherwise they might be
+    // overwritten.
     listItem.setGlyphType(DocumentApp.GlyphType.BULLET);
   }
 }
 
-function appendQuantifiedItems(body: GoogleAppsScript.Document.Body, responseItems: ResponseItem[]) {
+function appendQuantifiedItems(
+  body: GoogleAppsScript.Document.Body,
+  responseItems: ResponseItem[],
+): void {
   let quantifiedHeader = body.appendParagraph('Quantified improvements');
   quantifiedHeader.setHeading(DocumentApp.ParagraphHeading.HEADING2);
 
@@ -45,7 +55,9 @@ function appendQuantifiedItems(body: GoogleAppsScript.Document.Body, responseIte
     }
 
     // Perf area and change percentage.
-    let listItem = body.appendListItem(`[${responseItem.perfArea.toLowerCase()}, `);
+    let listItem = body.appendListItem(
+      `[${responseItem.perfArea.toLowerCase()}, `,
+    );
     let changePercentage = computeChangePercentage(responseItem);
     let formattedPercentage = `${abs(changePercentage).toFixed(1)}%`;
     let percentageText = listItem.appendText(` ${formattedPercentage} `);
@@ -58,11 +70,14 @@ function appendQuantifiedItems(body: GoogleAppsScript.Document.Body, responseIte
     listItem.appendText(responseItem.shortDescription);
     appendAuthors(listItem, responseItem);
     appendCommitsSubItem(body, responseItem);
-    appendMetricSubItem(body, responseItem, changePercentage, formattedPercentage);
+    appendMetricSubItem(
+      body, responseItem, changePercentage, formattedPercentage,
+    );
     appendIssuesSubItem(body, responseItem);
     appendDocLink(body, responseItem);
 
-    // List item glyph types must be set in the end. Otherwise they might be overwritten.
+    // List item glyph types must be set in the end. Otherwise they might be
+    // overwritten.
     listItem.setGlyphType(DocumentApp.GlyphType.BULLET);
   }
 }
@@ -87,7 +102,8 @@ class ResponseItem {
 
   constructor(row: any[]) {
     if (row.length != kColCount) {
-      throw `Row length ${row.length} does not match kColCount = ${kColCount} for row = ${row}`;
+      throw `Row length ${row.length} does not match ` +
+      `kColCount = ${kColCount} for row = ${row}`;
     }
     this.timestamp = row[kColTimestamp];
     this.email = row[kColEmail];
@@ -185,7 +201,9 @@ function createDoc(): GoogleAppsScript.Document.Document {
 function readResponses(): ResponseItem[] {
   let ss = SpreadsheetApp.openById(kFormSpreadsheetId);
   let responseSheet = ss.getSheetByName(kSheetName);
-  let range = responseSheet.getRange(2, 1, responseSheet.getMaxRows(), kColCount);
+  let range = responseSheet.getRange(
+    2, 1, responseSheet.getMaxRows(), kColCount,
+  );
   let responseValues = range.getValues();
   let responseItems = [];
 
@@ -201,23 +219,30 @@ function readResponses(): ResponseItem[] {
   return responseItems;
 }
 
-function appendAuthors(listItem: GoogleAppsScript.Document.ListItem, responseItem: ResponseItem, highlighted = true): void {
-    listItem.appendText('\n');
-    let allAuthors = [responseItem.firstAuthor].concat(responseItem.otherAuthors);
-    let shortenedAuthors = allAuthors.map((s) => s.replace('@google.com', '@'));
-    let authorsText = listItem.appendText(shortenedAuthors.join(', '));
-    authorsText.setItalic(true);
-    if (highlighted) {
-      authorsText.setBackgroundColor('#e2edff');
-    }
+function appendAuthors(
+  listItem: GoogleAppsScript.Document.ListItem,
+  responseItem: ResponseItem,
+  highlighted = true,
+): void {
+  listItem.appendText('\n');
+  let allAuthors = [responseItem.firstAuthor].concat(responseItem.otherAuthors);
+  let shortenedAuthors = allAuthors.map((s) => s.replace('@google.com', '@'));
+  let authorsText = listItem.appendText(shortenedAuthors.join(', '));
+  authorsText.setItalic(true);
+  if (highlighted) {
+    authorsText.setBackgroundColor('#e2edff');
+  }
 }
 
-function appendCommitsSubItem(body: GoogleAppsScript.Document.Body, responseItem: ResponseItem): void {
+function appendCommitsSubItem(
+  body: GoogleAppsScript.Document.Body,
+  responseItem: ResponseItem,
+): void {
   let commitsSubItem = body.appendListItem(`Commit${s(responseItem.commits)}:`);
   commitsSubItem.setNestingLevel(1);
-  for (var commitIndex = 0; commitIndex < responseItem.commits.length; commitIndex += 1) {
+  for (let i = 0; i < responseItem.commits.length; i += 1) {
     let separator = commitsSubItem.appendText(' ');
-    let commitUrl = responseItem.commits[commitIndex];
+    let commitUrl = responseItem.commits[i];
     let commitText = commitsSubItem.appendText(`${shortenCommit(commitUrl)}`);
     commitText.setLinkUrl(commitUrl);
     separator.setLinkUrl(null);
@@ -225,22 +250,35 @@ function appendCommitsSubItem(body: GoogleAppsScript.Document.Body, responseItem
   commitsSubItem.setGlyphType(DocumentApp.GlyphType.HOLLOW_BULLET);
 }
 
-function appendMetricSubItem(body: GoogleAppsScript.Document.Body, responseItem: ResponseItem, changePercentage: number, formattedPercentage: string): void {
+function appendMetricSubItem(
+  body: GoogleAppsScript.Document.Body,
+  responseItem: ResponseItem,
+  changePercentage: number,
+  formattedPercentage: string,
+): void {
   let isTime = kTimeUnits.includes(responseItem.unit);
   let increaseOrReduction = changePercentage > 0 ? 'increase' : 'reduction';
   let direction = isTime ? 'speedup' : increaseOrReduction;
 
-  let metricSubItem = body.appendListItem(`${formattedPercentage} ${direction} (`);
+  let metricSubItem =
+    body.appendListItem(`${formattedPercentage} ${direction} (`);
   metricSubItem.setNestingLevel(1);
-  let detailedMetrics = metricSubItem.appendText(`${responseItem.oldMetric} ${responseItem.unit} to ${responseItem.newMetric} ${responseItem.unit}`);
+  let detailedMetrics = metricSubItem.appendText(
+    `${responseItem.oldMetric} ${responseItem.unit} ` +
+    `to ${responseItem.newMetric} ${responseItem.unit}`,
+  );
   detailedMetrics.setLinkUrl(responseItem.metricLink);
-  let descriptionText = metricSubItem.appendText(`) in ${responseItem.metricDescription}.`);
+  let descriptionText =
+    metricSubItem.appendText(`) in ${responseItem.metricDescription}.`);
   descriptionText.setLinkUrl(null);
 
   metricSubItem.setGlyphType(DocumentApp.GlyphType.HOLLOW_BULLET);
 }
 
-function appendIssuesSubItem(body: GoogleAppsScript.Document.Body, responseItem: ResponseItem): void {
+function appendIssuesSubItem(
+  body: GoogleAppsScript.Document.Body,
+  responseItem: ResponseItem,
+): void {
   if (responseItem.issues.length == 0) {
     return;
   }
@@ -256,7 +294,10 @@ function appendIssuesSubItem(body: GoogleAppsScript.Document.Body, responseItem:
   issuesSubItem.setGlyphType(DocumentApp.GlyphType.HOLLOW_BULLET);
 }
 
-function appendDocLink(body: GoogleAppsScript.Document.Body, responseItem: ResponseItem): void {
+function appendDocLink(
+  body: GoogleAppsScript.Document.Body,
+  responseItem: ResponseItem,
+): void {
   if (responseItem.docLink == null || responseItem.docLink.trim() == '') {
     return;
   }
