@@ -148,21 +148,21 @@ export function shortenCommit(commitUrl: string): string {
 }
 
 export function shortenIssue(issueUrl: string): string {
-  let corpIssueMatch = issueUrl.match(/b.corp.google.com\/(issues\/)?([0-9]+)/);
+  let corpIssueMatch = issueUrl.match(RegExp(kIssueCorpRegexString));
   if (corpIssueMatch != null) {
-    return `b/${corpIssueMatch[2]}`;
+    return `b/${corpIssueMatch[3]}`;
   }
-  let bMatch = issueUrl.match(/b\/([0-9]+)/);
+  let bMatch = issueUrl.match(RegExp(kIssueCorpShortRegexString));
   if (bMatch != null) {
-    return `b/${bMatch[1]}`;
+    return `b/${bMatch[2]}`;
   }
-  let issueMatch = issueUrl.match(/\/issues\/([0-9]+)/);
+  let issueMatch = issueUrl.match(RegExp(kIssueGeneralRegexString));
   if (issueMatch != null) {
     return `#${issueMatch[1]}`;
   }
-  let chromiumMatch = issueUrl.match(/bugs.chromium.org\/.*id=([0-9]+)/);
+  let chromiumMatch = issueUrl.match(RegExp(kIssueChromiumRegexString));
   if (chromiumMatch != null) {
-    return chromiumMatch[1];
+    return chromiumMatch[2];
   }
   throw `Unrecognized issue url ${issueUrl}`;
 }
@@ -329,3 +329,20 @@ const kColUnit = 13;
 const kColMetricDescription = 14;
 const kColMetricLink = 15;
 const kColCount = 16;
+
+const kHttpRegexString = '(http[s]?://)?';
+const kIssueCorpRegexString = `${kHttpRegexString}b.corp.google.com\/(issues\/)?([0-9]+)`;
+const kIssueCorpShortRegexString = `${kHttpRegexString}b\/([0-9]+)`;
+const kIssueGeneralRegexString = '.*\/issues\/([0-9]+)';
+const kIssueChromiumRegexString = `${kHttpRegexString}bugs\.chromium\.org\/.*id=([0-9]+)(&.*)*`;
+
+const kIssuesRegex = RegExp(
+  '^((' +
+  `(${kIssueCorpRegexString})|` +
+  `(${kIssueCorpShortRegexString})|` +
+  `(${kIssueGeneralRegexString})|` +
+  `(${kIssueChromiumRegexString})` +
+  ')\n?)*$',
+);
+
+export {kIssuesRegex};
