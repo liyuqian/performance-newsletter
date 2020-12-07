@@ -1,5 +1,14 @@
 // TODO script to validate form input and preview result?
 
+import {
+  kIssueCorpRegexString,
+  kIssueCorpShortRegexString,
+  kIssueGeneralRegexString,
+  kIssueChromiumRegexString,
+  kCommitRegexString,
+  kClRegexString,
+} from "./regex";
+
 function generateNewsletter() {
   let responseItems = readResponses();
 
@@ -136,13 +145,13 @@ function trimAtGoogle(s: string): string {
 }
 
 export function shortenCommit(commitUrl: string): string {
-  let sha1Match = commitUrl.match(/\/([0-9a-f]{40})/);
+  let sha1Match = commitUrl.match(RegExp(kCommitRegexString));
   if (sha1Match != null) {
     return sha1Match[1].substring(0, 7);
   }
-  let clMatch = commitUrl.match(/cl\/([0-9]+)/);
+  let clMatch = commitUrl.match(RegExp(kClRegexString));
   if (clMatch != null) {
-    return clMatch[0];
+    return `cl/${clMatch[1]}`;
   }
   throw `Unrecognized commit url ${commitUrl}`;
 }
@@ -329,20 +338,3 @@ const kColUnit = 13;
 const kColMetricDescription = 14;
 const kColMetricLink = 15;
 const kColCount = 16;
-
-const kHttpRegexString = '(http[s]?://)?';
-const kIssueCorpRegexString = `${kHttpRegexString}b.corp.google.com\/(issues\/)?([0-9]+)`;
-const kIssueCorpShortRegexString = `${kHttpRegexString}b\/([0-9]+)`;
-const kIssueGeneralRegexString = '.*\/issues\/([0-9]+)';
-const kIssueChromiumRegexString = `${kHttpRegexString}bugs\.chromium\.org\/.*id=([0-9]+)(&.*)*`;
-
-const kIssuesRegex = RegExp(
-  '^((' +
-  `(${kIssueCorpRegexString})|` +
-  `(${kIssueCorpShortRegexString})|` +
-  `(${kIssueGeneralRegexString})|` +
-  `(${kIssueChromiumRegexString})` +
-  ')\n?)*$',
-);
-
-export {kIssuesRegex};
