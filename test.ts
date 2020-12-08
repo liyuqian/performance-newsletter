@@ -1,5 +1,5 @@
 import {shortenIssue, shortenCommit} from './doc';
-import { kCommitsRegex, kIssuesRegex } from './regex';
+import { kCommitsRegex, kIssuesRegex } from './config';
 
 function testAll(): void {
   testShortenIssue();
@@ -49,7 +49,7 @@ function testRegex(): void {
     'b/143774406\n' +
     'https://bugs.chromium.org/p/skia/issues/detail?id=10951&q=flutter&can=2&sort=-id';  // TODO $
   if (!testIssues.match(kIssuesRegex)) {
-    throw `Failed to match issues:\n${testIssues}`;
+    throw `Failed to match issues:\n${testIssues}\n\npattern:\n${kIssuesRegex.source}`;
   }
 
   let badIssues = testIssues + '\n' + 'SomethingBad';
@@ -65,7 +65,7 @@ function testRegex(): void {
     'http://cl/293363020\n' +
     'https://critique-ng.corp.google.com/cl/333841120';
   if (!testCommits.match(kCommitsRegex)) {
-    throw `Failed to match commits:\n${testCommits}`;
+    throw `Failed to match commits:\n${testCommits}\n\npattern:\n${kCommitsRegex.source}`;
   }
 
   let badCommits = testCommits + '\n' + 'SomethingBad';

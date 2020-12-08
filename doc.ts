@@ -1,13 +1,12 @@
 // TODO script to validate form input and preview result?
 
 import {
-  kIssueCorpRegexString,
-  kIssueCorpShortRegexString,
-  kIssueGeneralRegexString,
-  kIssueChromiumRegexString,
-  kCommitRegexString,
-  kClRegexString,
-} from "./regex";
+  kCommitShorteners,
+  kFormSpreadsheetId,
+  kIssueShorteners,
+  kNewsletterFolderId,
+  UrlRegexShortener,
+} from "./config";
 
 function generateNewsletter() {
   let responseItems = readResponses();
@@ -144,36 +143,30 @@ function trimAtGoogle(s: string): string {
   return s.replace('@google.com', '@').replace('@google', '@');
 }
 
+function shorten(url: string, shorteners: UrlRegexShortener[]) {
+  for (var i in shorteners) {
+    let short = shorteners[i].short(url);
+    if (short != null) {
+      return short;
+    }
+  }
+  return null;
+}
+
 export function shortenCommit(commitUrl: string): string {
-  let sha1Match = commitUrl.match(RegExp(kCommitRegexString));
-  if (sha1Match != null) {
-    return sha1Match[1].substring(0, 7);
+  let short = shorten(commitUrl, kCommitShorteners);
+  if (short == null) {
+    throw `Unrecognized commit url ${commitUrl}`;
   }
-  let clMatch = commitUrl.match(RegExp(kClRegexString));
-  if (clMatch != null) {
-    return `cl/${clMatch[1]}`;
-  }
-  throw `Unrecognized commit url ${commitUrl}`;
+  return short;
 }
 
 export function shortenIssue(issueUrl: string): string {
-  let corpIssueMatch = issueUrl.match(RegExp(kIssueCorpRegexString));
-  if (corpIssueMatch != null) {
-    return `b/${corpIssueMatch[3]}`;
+  let short = shorten(issueUrl, kIssueShorteners);
+  if (short == null) {
+    throw `Unrecognized issue url ${issueUrl}`;
   }
-  let bMatch = issueUrl.match(RegExp(kIssueCorpShortRegexString));
-  if (bMatch != null) {
-    return `b/${bMatch[2]}`;
-  }
-  let issueMatch = issueUrl.match(RegExp(kIssueGeneralRegexString));
-  if (issueMatch != null) {
-    return `#${issueMatch[1]}`;
-  }
-  let chromiumMatch = issueUrl.match(RegExp(kIssueChromiumRegexString));
-  if (chromiumMatch != null) {
-    return chromiumMatch[2];
-  }
-  throw `Unrecognized issue url ${issueUrl}`;
+  return short;
 }
 
 // May return positive or negative numbers for increasing or decreasing changes.
@@ -316,9 +309,7 @@ function appendDocLink(
   docLinkSubItem.setGlyphType(DocumentApp.GlyphType.HOLLOW_BULLET);
 }
 
-const kFormSpreadsheetId = '1Stmjwk1ptjq60_d-lvCkQ4WaKHY_yYGLQixhtDBs8UM';
 const kSheetName = 'responses';
-const kNewsletterFolderId = '1AlHARId6KQs4npX5SA-9KDuKBtRfiJqm';
 const kTimeUnits = ['second', 'seconds', 's', 'ms', 'us', 'ns'];
 
 const kColTimestamp = 0;
