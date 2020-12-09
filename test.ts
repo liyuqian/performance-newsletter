@@ -1,6 +1,8 @@
 import {shortenIssue, shortenCommit, trimAt} from './doc';
 import { kCommitsRegex, kIssuesRegex } from './config';
 
+// TODO integration test between doc and form.
+
 function testAll(): void {
   testShortenIssue();
   testShortenCommit();

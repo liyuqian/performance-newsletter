@@ -98,7 +98,6 @@ const kFormDescription =
   'Please fill out the details about the performance improvement you\'ve ' +
   'made and we\'ll generate the newsletter accordingly. If there are ' +
   'multiple improvements, please fill out this form multiple times. We\'ll ' +
-  'record your identity so we can ask for help if we need more information ' +
-  'about this item.';
+  'record your identity so we can ask for help if we need more information.';
 
 const kPerfAreas = ['Speed', 'Memory', 'App size', 'Energy'];

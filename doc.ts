@@ -1,5 +1,3 @@
-// TODO script to validate form input and preview result?
-
 import {
   kCanonicalAt,
   kCommitShorteners,
