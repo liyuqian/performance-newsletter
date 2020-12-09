@@ -1,11 +1,12 @@
 // Modify the following config constants appropriately for specific newsletters.
 export {
-  kFormSpreadsheetId,
   kNewsletterFolderId,
+  kFormSpreadsheetId,
   kIssueShorteners,
   kCommitShorteners,
   kIssuesRegex,
   kCommitsRegex,
+  kCanonicalAt,
 };
 
 // The Google drive folder id to host all performance newsletter related docs,
@@ -17,6 +18,12 @@ const kNewsletterFolderId = '1AlHARId6KQs4npX5SA-9KDuKBtRfiJqm';
 // TODO: maybe this can be generated and persisted automatically as the form
 // is generated automatically.
 const kFormSpreadsheetId = '1Stmjwk1ptjq60_d-lvCkQ4WaKHY_yYGLQixhtDBs8UM';
+
+// We'll trim `xyz${kCanonicalAt}` to `xyz@`.
+//
+// For example, 'liyuqian@google.com' to 'liyuqian@', and 'liyuqian@google'
+// to 'liyuqian@'.
+const kCanonicalAt = /@google(.com)?/;
 
 // A class that shortens a full URL that matches a pattern.
 export class UrlRegexShortener {

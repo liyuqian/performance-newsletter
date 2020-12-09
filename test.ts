@@ -1,9 +1,10 @@
-import {shortenIssue, shortenCommit} from './doc';
+import {shortenIssue, shortenCommit, trimAt} from './doc';
 import { kCommitsRegex, kIssuesRegex } from './config';
 
 function testAll(): void {
   testShortenIssue();
   testShortenCommit();
+  testTrimAt();
   testRegex();
 }
 
@@ -39,6 +40,15 @@ function testShortenCommit(): void {
   }
 }
 
+function testTrimAt(): void {
+  let testInputs = ['liyuqian@google.com', 'liyuqian@google'];
+  for (var i in testInputs) {
+    if (trimAt(testInputs[i]) != 'liyuqian@') {
+      throw `Failed to trim ${testInputs[i]}`;
+    }
+  }
+}
+
 function testRegex(): void {
   let testIssues =
     'https://github.com/dart-lang/sdk/issues/41704\n' +
@@ -47,7 +57,7 @@ function testRegex(): void {
     'https://b.corp.google.com/143774406\n' +
     'http://b/143774406\n' +
     'b/143774406\n' +
-    'https://bugs.chromium.org/p/skia/issues/detail?id=10951&q=flutter&can=2&sort=-id';  // TODO $
+    'https://bugs.chromium.org/p/skia/issues/detail?id=10951&q=flutter&can=2&sort=-id';
   if (!testIssues.match(kIssuesRegex)) {
     throw `Failed to match issues:\n${testIssues}\n\npattern:\n${kIssuesRegex.source}`;
   }

@@ -1,6 +1,7 @@
 // TODO script to validate form input and preview result?
 
 import {
+  kCanonicalAt,
   kCommitShorteners,
   kFormSpreadsheetId,
   kIssueShorteners,
@@ -135,12 +136,12 @@ class ResponseItem {
 function s(list: any[]): string { return list.length > 1 ? 's' : ''; }
 function abs(x: number): number { return x < 0 ? -x : x; }
 
-function splitLines(lines): string[] {
+function splitLines(lines: string): string[] {
   return lines.split(/\r?\n/).filter((line: string) => line.trim() != '');
 }
 
-function trimAtGoogle(s: string): string {
-  return s.replace('@google.com', '@').replace('@google', '@');
+export function trimAt(s: string): string {
+  return s.replace(kCanonicalAt, '@');
 }
 
 function shorten(url: string, shorteners: UrlRegexShortener[]) {
@@ -228,7 +229,7 @@ function appendAuthors(
 ): void {
   listItem.appendText('\n');
   let allAuthors = [responseItem.firstAuthor].concat(responseItem.otherAuthors);
-  let shortenedAuthors = allAuthors.map(trimAtGoogle);
+  let shortenedAuthors = allAuthors.map(trimAt);
   let authorsText = listItem.appendText(shortenedAuthors.join(', '));
   authorsText.setItalic(true);
   if (highlighted) {
