@@ -7,6 +7,8 @@ export {
   kIssuesRegex,
   kCommitsRegex,
   kCanonicalAt,
+  kFormDescription,
+  kPerfAreas,
 };
 
 // The Google drive folder id to host all performance newsletter related docs,
@@ -88,3 +90,15 @@ function jointPattern(shorteners: UrlRegexShortener[]): string {
 
 const kIssuesRegex = new RegExp(jointPattern(kIssueShorteners));
 const kCommitsRegex = new RegExp(jointPattern(kCommitShorteners));
+
+const kFormDescription =
+  'A more distributed and automated way of generating ' +
+  'go/flutter-performance-newsletter.\n\n' +
+  '' +
+  'Please fill out the details about the performance improvement you\'ve ' +
+  'made and we\'ll generate the newsletter accordingly. If there are ' +
+  'multiple improvements, please fill out this form multiple times. We\'ll ' +
+  'record your identity so we can ask for help if we need more information ' +
+  'about this item.';
+
+const kPerfAreas = ['Speed', 'Memory', 'App size', 'Energy'];

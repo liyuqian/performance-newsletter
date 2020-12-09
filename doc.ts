@@ -8,6 +8,7 @@ import {
   kNewsletterFolderId,
   UrlRegexShortener,
 } from "./config";
+import { moveFile } from "./util";
 
 function generateNewsletter() {
   let responseItems = readResponses();
@@ -187,17 +188,7 @@ function createDoc(): GoogleAppsScript.Document.Document {
 
   Logger.log("Creating %s", filename);
   let doc = DocumentApp.create(filename);
-  let docFile = DriveApp.getFileById(doc.getId());
-  Logger.log(`Adding ${filename} to folder ${folder.getName()}`)
-  folder.addFile(docFile);
-  let parentIterator = docFile.getParents();
-  while (parentIterator.hasNext()) {
-    let parent = parentIterator.next();
-    if (parent.getId() != folder.getId()) {
-      Logger.log(`Removing ${filename} from folder ${parent.getName()}`)
-      parent.removeFile(docFile);
-    }
-  }
+  moveFile(doc.getId(), folder);
   return doc;
 }
 
