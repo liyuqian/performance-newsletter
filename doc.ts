@@ -5,7 +5,30 @@ import {
   kNewsletterFolderId,
   UrlRegexShortener,
 } from "./config";
-import { kSpreadsheetIdKey, moveFile } from "./util";
+
+import {
+  kSpreadsheetIdKey,
+  kSheetName,
+  kTimeUnits,
+  kColTimestamp,
+  kColEmail,
+  kColShortDescription,
+  kColLandDate,
+  kColPerfArea,
+  kColCommits,
+  kColFirstAuthor,
+  kColOtherAuthors,
+  kColIssues,
+  kColDocLink,
+  kColIsQuantified,
+  kColOldMetric,
+  kColNewMetric,
+  kColUnit,
+  kColMetricDescription,
+  kColMetricLink,
+  kColCount,
+  moveFile,
+ } from "./util";
 
 export function generateNewsletter(): GoogleAppsScript.Document.Document {
   let formResponses = readResponses();
@@ -306,24 +329,3 @@ function appendDocLink(
   docLinkSubItem.setNestingLevel(1);
   docLinkSubItem.setGlyphType(DocumentApp.GlyphType.HOLLOW_BULLET);
 }
-
-const kSheetName = 'Form Responses 1';
-const kTimeUnits = ['second', 'seconds', 's', 'ms', 'us', 'ns'];
-
-const kColTimestamp = 0;
-const kColEmail = 1;
-const kColShortDescription = 2;
-const kColLandDate = 3;
-const kColPerfArea = 4;
-const kColCommits = 5;
-const kColFirstAuthor = 6;
-const kColOtherAuthors = 7;
-const kColIssues = 8;
-const kColDocLink = 9;
-const kColIsQuantified = 10;
-const kColOldMetric = 11;
-const kColNewMetric = 12;
-const kColUnit = 13;
-const kColMetricDescription = 14;
-const kColMetricLink = 15;
-const kColCount = 16;

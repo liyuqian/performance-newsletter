@@ -6,38 +6,55 @@ import {
   kPerfAreas,
 } from "./config";
 
-import { kFormIdKey, kSpreadsheetIdKey, moveFile } from "./util";
+import { kColCount, kFormIdKey, kSpreadsheetIdKey, moveFile } from "./util";
+
+// Helper class so we can send in count by reference instead of by value.
+class ItemCounter {
+  count: number;
+
+  constructor() { this.count = 0; }
+}
 
 export function generateNewsletterItemForm(): void {
-  // TODO throw exception if the item count here disagrees with kColCount - 2.
   let form = createForm();
   form.setDescription(kFormDescription);
   form.setCollectEmail(true);
-  addGeneralSection(form);
-  addQuantifiedSection(form);
+  let counter = new ItemCounter();
+  addGeneralSection(form, counter);
+  addQuantifiedSection(form, counter);
+  if (counter.count != expectedItemCount()) {
+    throw `${expectedItemCount()} form items expected, ` +
+      `but ${counter.count} are added`;
+  }
 }
 
-function addGeneralSection(form: GoogleAppsScript.Forms.Form): void {
-  logProgress('one line text');
+// Minus 2 columns: timestamp and submitter's email
+function expectedItemCount(): number { return kColCount - 2; }
+
+function addGeneralSection(
+  form: GoogleAppsScript.Forms.Form,
+  counter: ItemCounter,
+): void {
+  logItem('one line text', counter);
   let oneLineText = form.addTextItem();
   oneLineText.setTitle(
     'Please give a one-line description of the improvement.',
   );
   oneLineText.setRequired(true);
 
-  logProgress('date landed');
+  logItem('date landed', counter);
   let dateLanded = form.addDateItem();
   dateLanded.setTitle('What\'s the date when this improvement landed?');
   dateLanded.setRequired(true);
 
-  logProgress('perf areas');
+  logItem('perf areas', counter);
   let perfAreas = form.addCheckboxItem();
   perfAreas.setTitle('What performance areas does this improvement affect?');
   perfAreas.setChoices(kPerfAreas.map((a) => perfAreas.createChoice(a)));
   perfAreas.showOtherOption(true);
   perfAreas.setRequired(true);
 
-  logProgress('commits');
+  logItem('commits', counter);
   let commitsText = form.addParagraphTextItem();
   commitsText.setTitle(
     'What are the commits that contribute to this improvement? ' +
@@ -49,7 +66,7 @@ function addGeneralSection(form: GoogleAppsScript.Forms.Form): void {
   commitsText.setValidation(commitsTextValidation.build());
   commitsText.setRequired(true);
 
-  logProgress('first author');
+  logItem('first author', counter);
   let firstAuthor = form.addTextItem();
   firstAuthor.setTitle(
     'Who is the main author of this improvement? Please enter an email or a ' +
@@ -57,7 +74,7 @@ function addGeneralSection(form: GoogleAppsScript.Forms.Form): void {
   );
   firstAuthor.setRequired(true);
 
-  logProgress('other authors');
+  logItem('other authors', counter);
   let otherAuthors = form.addParagraphTextItem();
   otherAuthors.setTitle(
     'Who are other contributors (code authors, code reviewers, issue ' +
@@ -65,7 +82,7 @@ function addGeneralSection(form: GoogleAppsScript.Forms.Form): void {
     'id per line.',
   );
 
-  logProgress('issues');
+  logItem('issues', counter);
   let issuesText = form.addParagraphTextItem();
   issuesText.setTitle(
     'What issues are related with this improvement? ' +
@@ -76,7 +93,7 @@ function addGeneralSection(form: GoogleAppsScript.Forms.Form): void {
   issuesTextValidation.setHelpText(`Must match regex ${kIssuesRegex}`);
   issuesText.setValidation(issuesTextValidation.build());
 
-  logProgress('doc');
+  logItem('doc', counter);
   let docText = form.addTextItem();
   docText.setTitle(
     'If there\'s a design doc, a webpage, or a wiki article ' +
@@ -86,7 +103,7 @@ function addGeneralSection(form: GoogleAppsScript.Forms.Form): void {
   docText.setValidation(
     FormApp.createTextValidation().requireTextIsUrl().build());
 
-  logProgress('quantified choice');
+  logItem('quantified choice', counter);
   let quantifiedChoice = form.addMultipleChoiceItem();
   quantifiedChoice.setTitle('Is this performance improvement quantified?');
   let yesChoice = quantifiedChoice.createChoice(
@@ -97,12 +114,14 @@ function addGeneralSection(form: GoogleAppsScript.Forms.Form): void {
   quantifiedChoice.setRequired(true);
 }
 
-function addQuantifiedSection(form: GoogleAppsScript.Forms.Form): void {
-  logProgress('quantified section')
+function addQuantifiedSection(
+  form: GoogleAppsScript.Forms.Form,
+  counter: ItemCounter,
+): void {
   let pageBreak = form.addPageBreakItem();
   pageBreak.setTitle('Quantified improvement');
 
-  logProgress('old metric');
+  logItem('old metric', counter);
   let oldMetric = form.addTextItem();
   oldMetric.setTitle(
     'What\'s the old performance metric number before improvements?');
@@ -110,14 +129,14 @@ function addQuantifiedSection(form: GoogleAppsScript.Forms.Form): void {
   oldMetric.setValidation(numberValidation);
   oldMetric.setRequired(true);
 
-  logProgress('new metric');
+  logItem('new metric', counter);
   let newMetric = form.addTextItem();
   newMetric.setTitle(
     'What\'s the new performance metric number after improvements?');
   newMetric.setValidation(numberValidation);
   newMetric.setRequired(true);
 
-  logProgress('unit');
+  logItem('unit', counter);
   let unit = form.addTextItem();
   unit.setTitle('What\'s the unit of that quantified number (e.g., times, ' +
     'percent, frames, fps, KB, ms) ?');
@@ -127,12 +146,12 @@ function addQuantifiedSection(form: GoogleAppsScript.Forms.Form): void {
   );
   unit.setRequired(true);
 
-  logProgress('metric description');
+  logItem('metric description', counter);
   let metricDescription = form.addTextItem();
   metricDescription.setTitle('What\'s the number about? For example, ' +
     '"Gallery app size", "iOS average frame raster time".');
 
-  logProgress('metric url');
+  logItem('metric url', counter);
   let metricUrl = form.addTextItem();
   metricUrl.setTitle(
     'Please enter a link that shows the quantified improvement number (e.g., ' +
@@ -167,7 +186,7 @@ function createForm(): GoogleAppsScript.Forms.Form {
   return form;
 }
 
-function logProgress(name: string) {
+function logItem(name: string, counter: ItemCounter) {
   // We can log more info such as x/y progress in the future.
-  Logger.log(`Adding ${name}`);
+  Logger.log(`Adding ${name} (${++counter.count}/${expectedItemCount()})`);
 }
