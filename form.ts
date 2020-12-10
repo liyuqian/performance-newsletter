@@ -8,7 +8,8 @@ import {
 
 import { kFormIdKey, kSpreadsheetIdKey, moveFile } from "./util";
 
-function generateNewsletterItemForm(): void {
+export function generateNewsletterItemForm(): void {
+  // TODO throw exception if the item count here disagrees with kColCount - 2.
   let form = createForm();
   form.setDescription(kFormDescription);
   form.setCollectEmail(true);

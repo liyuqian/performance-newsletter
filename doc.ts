@@ -7,7 +7,7 @@ import {
 } from "./config";
 import { kSpreadsheetIdKey, moveFile } from "./util";
 
-function generateNewsletter() {
+export function generateNewsletter(): GoogleAppsScript.Document.Document {
   let responseItems = readResponses();
 
   let doc = createDoc();
@@ -18,6 +18,9 @@ function generateNewsletter() {
 
   appendQuantifiedItems(body, responseItems);
   appendOtherItems(body, responseItems);
+  doc.saveAndClose();
+
+  return doc;
 }
 
 function appendOtherItems(
@@ -90,6 +93,8 @@ function appendQuantifiedItems(
 }
 
 class ResponseItem {
+  // TODO rename ResponseItem to Response, and responseItem to response to avoid
+  // confusions with form items and responses?
   timestamp: string;
   email: string;
   shortDescription: string;

@@ -2,6 +2,7 @@
 // configurations in the export appropriately.
 export {
   kNewsletterFolderId,
+  kGoldNewsletterPdfId,
   kIssueShorteners,
   kCommitShorteners,
   kIssuesRegex,
@@ -14,6 +15,12 @@ export {
 // The Google drive folder id to host all performance newsletter related docs,
 // forms, spreadsheets, and so on.
 const kNewsletterFolderId = '1AlHARId6KQs4npX5SA-9KDuKBtRfiJqm';
+
+// The gold PDF file for integration tests.
+//
+// In future continuous integration tests, the newly generated PDF should
+// exactly match this file.
+const kGoldNewsletterPdfId = '14ee5VVh5jEyWDJ0jtVfYrGwUJN6xxZPM';
 
 // We'll trim `xyz${kCanonicalAt}` to `xyz@`.
 //
