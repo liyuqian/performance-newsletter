@@ -13,3 +13,11 @@ export function moveFile(
     }
   }
 }
+
+// Property key for the current performance item form id.
+const kFormIdKey = 'FORM_ID';
+
+// Property key for spreadsheet id that saves the current form's responses.
+const kSpreadsheetIdKey = 'SPREADSHEET_ID';
+
+export {kFormIdKey, kSpreadsheetIdKey as kSpreadsheetIdKey};

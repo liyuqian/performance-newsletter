@@ -1,7 +1,7 @@
-// Modify the following config constants appropriately for specific newsletters.
+// For your specific performance newsletters, please modify the following
+// configurations in the export appropriately.
 export {
   kNewsletterFolderId,
-  kFormSpreadsheetId,
   kIssueShorteners,
   kCommitShorteners,
   kIssuesRegex,
@@ -12,14 +12,8 @@ export {
 };
 
 // The Google drive folder id to host all performance newsletter related docs,
-// forms, sheets, and so on.
+// forms, spreadsheets, and so on.
 const kNewsletterFolderId = '1AlHARId6KQs4npX5SA-9KDuKBtRfiJqm';
-
-// The response spreadsheet id of the performance newsletter item form.
-//
-// TODO: maybe this can be generated and persisted automatically as the form
-// is generated automatically.
-const kFormSpreadsheetId = '1Stmjwk1ptjq60_d-lvCkQ4WaKHY_yYGLQixhtDBs8UM';
 
 // We'll trim `xyz${kCanonicalAt}` to `xyz@`.
 //

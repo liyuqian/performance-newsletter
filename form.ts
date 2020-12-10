@@ -6,10 +6,10 @@ import {
   kPerfAreas,
 } from "./config";
 
-import { moveFile } from "./util";
+import { kFormIdKey, kSpreadsheetIdKey, moveFile } from "./util";
 
 function generateNewsletterItemForm(): void {
-  let form = createFrom();
+  let form = createForm();
   form.setDescription(kFormDescription);
   form.setCollectEmail(true);
   addGeneralSection(form);
@@ -142,14 +142,27 @@ function addQuantifiedSection(form: GoogleAppsScript.Forms.Form): void {
   metricUrl.setRequired(true);
 }
 
-function createFrom(): GoogleAppsScript.Forms.Form {
+function createForm(): GoogleAppsScript.Forms.Form {
+  let date = Date();
   let folder = DriveApp.getFolderById(kNewsletterFolderId);
-  let filename = `Performance Newsletter Item Form ${Date()}`;
+  let filename = `Performance Newsletter Item Form ${date}`;
+  let spreadsheetName = `Item Responses ${date}`;
 
-  Logger.log("Creating %s", filename);
+  Logger.log('Creating %s', filename);
   let form = FormApp.create(filename);
   moveFile(form.getId(), folder);
 
+  Logger.log('Creating %s', spreadsheetName);
+  let spreadsheet = SpreadsheetApp.create(spreadsheetName);
+  moveFile(spreadsheet.getId(), folder);
+
+  form.setDestination(FormApp.DestinationType.SPREADSHEET, spreadsheet.getId());
+  let propertyMap = {};
+  propertyMap[kFormIdKey] = form.getId();
+  propertyMap[kSpreadsheetIdKey] = spreadsheet.getId();
+  PropertiesService.getUserProperties().setProperties(propertyMap);
+  Logger.log(
+    `Form ${form.getId()} created with responses in ${spreadsheet.getId()}.`);
   return form;
 }
 

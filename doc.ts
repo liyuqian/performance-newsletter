@@ -1,12 +1,11 @@
 import {
   kCanonicalAt,
   kCommitShorteners,
-  kFormSpreadsheetId,
   kIssueShorteners,
   kNewsletterFolderId,
   UrlRegexShortener,
 } from "./config";
-import { moveFile } from "./util";
+import { kSpreadsheetIdKey, moveFile } from "./util";
 
 function generateNewsletter() {
   let responseItems = readResponses();
@@ -182,7 +181,7 @@ function computeChangePercentage(responseItem: ResponseItem): number {
 
 function createDoc(): GoogleAppsScript.Document.Document {
   let folder = DriveApp.getFolderById(kNewsletterFolderId);
-  let filename = `Generated Newsletter ${Date()}`;
+  let filename = `Newsletter ${Date()}`;
 
   Logger.log("Creating %s", filename);
   let doc = DocumentApp.create(filename);
@@ -191,7 +190,13 @@ function createDoc(): GoogleAppsScript.Document.Document {
 }
 
 function readResponses(): ResponseItem[] {
-  let ss = SpreadsheetApp.openById(kFormSpreadsheetId);
+  let spreadsheetId = PropertiesService.getUserProperties().getProperty(kSpreadsheetIdKey);
+  if (spreadsheetId == null) {
+    throw `No ${kSpreadsheetIdKey} property found. Please generate the form ` +
+      `and its response spreadsheet first using generateNewsletterItemForm ` +
+      `function.\n\nCurrent properties: ${JSON.stringify(PropertiesService.getUserProperties().getProperties())}`;
+  }
+  let ss = SpreadsheetApp.openById(spreadsheetId);
   let responseSheet = ss.getSheetByName(kSheetName);
   let range = responseSheet.getRange(
     2, 1, responseSheet.getMaxRows(), kColCount,
@@ -299,7 +304,7 @@ function appendDocLink(
   docLinkSubItem.setGlyphType(DocumentApp.GlyphType.HOLLOW_BULLET);
 }
 
-const kSheetName = 'responses';
+const kSheetName = 'Form Responses 1';
 const kTimeUnits = ['second', 'seconds', 's', 'ms', 'us', 'ns'];
 
 const kColTimestamp = 0;
