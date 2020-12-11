@@ -3,12 +3,13 @@ import { kCommitsRegex, kIssuesRegex } from './config';
 
 // TODO README.md for how to use this.
 
-function runAllUnitTests(): void {
+function runAllUnitTests(): string {
   testShortenIssue();
   testShortenCommit();
   testTrimAt();
   testRegex();
   Logger.log('All unit tests ran successfully.');
+  return 'All unit tests ran successfully.';
 }
 
 function testShortenIssue(): void {

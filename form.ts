@@ -15,7 +15,7 @@ class ItemCounter {
   constructor() { this.count = 0; }
 }
 
-export function generateNewsletterItemForm(): void {
+export function generateNewsletterItemForm(): GoogleAppsScript.Forms.Form {
   let form = createForm();
   form.setDescription(kFormDescription);
   let counter = new ItemCounter();
@@ -25,6 +25,7 @@ export function generateNewsletterItemForm(): void {
     throw `${expectedItemCount()} form items expected, ` +
       `but ${counter.count} are added`;
   }
+  return form;
 }
 
 // Minus 1 column: timestamp

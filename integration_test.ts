@@ -11,7 +11,7 @@ enum TestStep {
 
 function runAllIntegrationTests(
   startFrom: TestStep = TestStep.GenerateForm,
-): void {
+): string {
   if (startFrom <= TestStep.GenerateForm) {
     generateNewsletterItemForm();
   }
@@ -64,6 +64,8 @@ function runAllIntegrationTests(
 
   Logger.log(
     `Successfully matched the exported PDF with ${goldFile.getName()}`);
+
+  return  'All integration tests ran successfully.';
 }
 
 function exportPdf(doc: GoogleAppsScript.Document.Document) {
