@@ -14,13 +14,13 @@ export {
 
 // The Google drive folder id to host all performance newsletter related docs,
 // forms, spreadsheets, and so on.
-const kNewsletterFolderId = '1AlHARId6KQs4npX5SA-9KDuKBtRfiJqm';
+const kNewsletterFolderId = '15ab_pUZIHqyFk3mOUFokY-5vBkCzI-7m';
 
 // The gold PDF file for integration tests.
 //
 // In future continuous integration tests, the newly generated PDF should
 // exactly match this file.
-const kGoldNewsletterPdfId = '14ee5VVh5jEyWDJ0jtVfYrGwUJN6xxZPM';
+const kGoldNewsletterPdfId = '1NWgV7z80HwBfNcvMA9E3XSWA5rxwLY4s';
 
 // We'll trim `xyz${kCanonicalAt}` to `xyz@`.
 //
@@ -98,7 +98,6 @@ const kFormDescription =
   '' +
   'Please fill out the details about the performance improvement you\'ve ' +
   'made and we\'ll generate the newsletter accordingly. If there are ' +
-  'multiple improvements, please fill out this form multiple times. We\'ll ' +
-  'record your identity so we can ask for help if we need more information.';
+  'multiple improvements, please fill out this form multiple times.';
 
 const kPerfAreas = ['Speed', 'Memory', 'App size', 'Energy'];

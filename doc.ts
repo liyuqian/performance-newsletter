@@ -11,7 +11,6 @@ import {
   kSheetName,
   kTimeUnits,
   kColTimestamp,
-  kColEmail,
   kColShortDescription,
   kColLandDate,
   kColPerfArea,
@@ -139,7 +138,6 @@ class FormResponse {
       `kColCount = ${kColCount} for row = ${row}`;
     }
     this.timestamp = row[kColTimestamp];
-    this.email = row[kColEmail];
     this.shortDescription = row[kColShortDescription];
     this.landDate = row[kColLandDate];
     this.perfArea = row[kColPerfArea];

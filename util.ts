@@ -4,7 +4,6 @@ export {
   kSheetName,
   kTimeUnits,
   kColTimestamp,
-  kColEmail,
   kColShortDescription,
   kColLandDate,
   kColPerfArea,
@@ -48,19 +47,18 @@ const kSheetName = 'Form Responses 1';
 const kTimeUnits = ['second', 'seconds', 's', 'ms', 'us', 'ns'];
 
 const kColTimestamp = 0;
-const kColEmail = 1;
-const kColShortDescription = 2;
-const kColLandDate = 3;
-const kColPerfArea = 4;
-const kColCommits = 5;
-const kColFirstAuthor = 6;
-const kColOtherAuthors = 7;
-const kColIssues = 8;
-const kColDocLink = 9;
-const kColIsQuantified = 10;
-const kColOldMetric = 11;
-const kColNewMetric = 12;
-const kColUnit = 13;
-const kColMetricDescription = 14;
-const kColMetricLink = 15;
-const kColCount = 16;
+const kColShortDescription = 1;
+const kColLandDate = 2;
+const kColPerfArea = 3;
+const kColCommits = 4;
+const kColFirstAuthor = 5;
+const kColOtherAuthors = 6;
+const kColIssues = 7;
+const kColDocLink = 8;
+const kColIsQuantified = 9;
+const kColOldMetric = 10;
+const kColNewMetric = 11;
+const kColUnit = 12;
+const kColMetricDescription = 13;
+const kColMetricLink = 14;
+const kColCount = 15;

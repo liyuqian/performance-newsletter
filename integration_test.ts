@@ -49,13 +49,17 @@ function testAllIntegrationTests(
       `${goldBytes.length} != ${pdfBytes.length}`;
   }
 
-  // Skip the first 8 * 16 bytes as they may include time information when
-  // the PDF is printed. We don't want to compare that.
-  for (var i = 8 * 16; i < goldBytes.length; i += 1) {
+  var diffCount: number = 0;
+  for (var i = 0; i < goldBytes.length; i += 1) {
     if (goldBytes[i] != pdfBytes[i]) {
-      throw `Gold file and pdf file have different ${i}th bytes: `
-        + `${goldBytes[i]} != ${pdfBytes[i]}`;
+      diffCount += 1;
     }
+  }
+
+  // Allow at most 1024 bytes to differ as they may include time information or
+  // other variable headers when the PDF is printed.
+  if (diffCount > 1024) {
+    throw `Gold file and pdf file differ by ${diffCount} bytes!`;
   }
 
   Logger.log(

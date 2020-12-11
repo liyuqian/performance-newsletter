@@ -18,7 +18,6 @@ class ItemCounter {
 export function generateNewsletterItemForm(): void {
   let form = createForm();
   form.setDescription(kFormDescription);
-  form.setCollectEmail(true);
   let counter = new ItemCounter();
   addGeneralSection(form, counter);
   addQuantifiedSection(form, counter);
@@ -28,8 +27,8 @@ export function generateNewsletterItemForm(): void {
   }
 }
 
-// Minus 2 columns: timestamp and submitter's email
-function expectedItemCount(): number { return kColCount - 2; }
+// Minus 1 column: timestamp
+function expectedItemCount(): number { return kColCount - 1; }
 
 function addGeneralSection(
   form: GoogleAppsScript.Forms.Form,
