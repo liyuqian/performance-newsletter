@@ -1,8 +1,6 @@
 import {shortenIssue, shortenCommit, trimAt} from './doc';
 import { kCommitsRegex, kIssuesRegex } from './config';
 
-// TODO README.md for how to use this.
-
 function runAllUnitTests(): string {
   testShortenIssue();
   testShortenCommit();

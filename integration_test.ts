@@ -9,6 +9,8 @@ enum TestStep {
   GenerateDoc,
 };
 
+// TODO Create a CI to run this on Github continuously.
+
 function runAllIntegrationTests(
   startFrom: TestStep = TestStep.GenerateForm,
 ): string {
