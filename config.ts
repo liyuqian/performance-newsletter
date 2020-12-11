@@ -14,13 +14,13 @@ export {
 
 // The Google drive folder id to host all performance newsletter related docs,
 // forms, spreadsheets, and so on.
-const kNewsletterFolderId = '15ab_pUZIHqyFk3mOUFokY-5vBkCzI-7m';
+const kNewsletterFolderId = '187QIQc68uUrlK9xfxrju7xR4ZU6n1hF4';
 
 // The gold PDF file for integration tests.
 //
 // In future continuous integration tests, the newly generated PDF should
 // exactly match this file.
-const kGoldNewsletterPdfId = '1NWgV7z80HwBfNcvMA9E3XSWA5rxwLY4s';
+const kGoldNewsletterPdfId = '1wUX0Jw_0K4YpaKPv8EUydGRMJTWUp7IB';
 
 // We'll trim `xyz${kCanonicalAt}` to `xyz@`.
 //
