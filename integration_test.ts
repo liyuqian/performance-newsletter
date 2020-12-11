@@ -9,7 +9,7 @@ enum TestStep {
   GenerateDoc,
 };
 
-function testAllIntegrationTests(
+function runAllIntegrationTests(
   startFrom: TestStep = TestStep.GenerateForm,
 ): void {
   if (startFrom <= TestStep.GenerateForm) {
