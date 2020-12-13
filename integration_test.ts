@@ -1,7 +1,7 @@
 import { kGoldNewsletterPdfId, kNewsletterFolderId } from './config';
 import { generateNewsletter } from './doc';
 import { generateNewsletterItemForm } from './form';
-import { kFormIdKey, moveFile } from './util';
+import { kFormIdKey, kSpreadsheetIdKey, moveFile } from './util';
 
 enum TestStep {
   GenerateForm,
@@ -9,13 +9,46 @@ enum TestStep {
   GenerateDoc,
 };
 
+class GeneratedDriveFiles {
+  #ids: string[];
+
+  constructor() {
+    this.#ids = [];
+  }
+
+  add(id: string): void { this.#ids.push(id); }
+
+  clear(): void {
+    for (var i = 0; i < this.#ids.length; i += 1) {
+      let file = DriveApp.getFileById(this.#ids[i]);
+      Logger.log(`Removing ${file.getName()} (${file.getId()})`);
+      file.setTrashed(true);
+    }
+  }
+}
+
 // TODO Create a CI to run this on Github continuously.
 
-function runAllIntegrationTests(
+function runAllIntegrationTests(): string {
+  let generatedDriveFiles = new GeneratedDriveFiles();
+  try {
+    runGoldenTest(generatedDriveFiles);
+  } finally {
+    generatedDriveFiles.clear();
+  }
+  return  'All integration tests ran successfully.';
+}
+
+function runGoldenTest(
+  generatedDriveFiles: GeneratedDriveFiles,
   startFrom: TestStep = TestStep.GenerateForm,
-): string {
+): void {
   if (startFrom <= TestStep.GenerateForm) {
     generateNewsletterItemForm();
+    generatedDriveFiles.add(
+      PropertiesService.getUserProperties().getProperty(kFormIdKey));
+    generatedDriveFiles.add(
+      PropertiesService.getUserProperties().getProperty(kSpreadsheetIdKey));
   }
 
   if (startFrom <= TestStep.FillItems) {
@@ -38,8 +71,10 @@ function runAllIntegrationTests(
   }
 
   let newsletter = generateNewsletter();
+  generatedDriveFiles.add(newsletter.getId());
   let folder = DriveApp.getFolderById(kNewsletterFolderId);
   let pdfFile = exportPdf(newsletter);
+  generatedDriveFiles.add(pdfFile.getId());
   moveFile(pdfFile.getId(), folder);
 
   let goldFile = DriveApp.getFileById(kGoldNewsletterPdfId);
@@ -66,8 +101,6 @@ function runAllIntegrationTests(
 
   Logger.log(
     `Successfully matched the exported PDF with ${goldFile.getName()}`);
-
-  return  'All integration tests ran successfully.';
 }
 
 function exportPdf(doc: GoogleAppsScript.Document.Document) {
