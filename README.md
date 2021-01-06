@@ -14,8 +14,8 @@ inspired by the manually written [Flutter Performance Updates in 2019][1].
 2. Clone/fork this repo, and `cd` into that checked out directory.
 3. Run `clasp login` for authorizations.
 4. Run `clasp create --type standalone` to create a Google App Script project.
-5. Follow [clasp run setup instructions][5] to set credentials needed for `clasp
-   run`.
+5. Follow clasp run [prerequisites][6] and [setup instructions][5] to
+   set credentials needed for `clasp run`.
 6. Run `clasp push && clasp run runAllUnitTests` to verify that the environment
    is properly set.
 
@@ -41,3 +41,4 @@ inspired by the manually written [Flutter Performance Updates in 2019][1].
 [3]: https://askubuntu.com/questions/426750/how-can-i-update-my-nodejs-to-the-latest-version
 [4]: https://developers.google.com/apps-script/guides/typescript
 [5]: https://github.com/google/clasp/blob/master/docs/run.md#setup-instructions
+[6]: https://github.com/google/clasp/blob/master/docs/run.md#prerequisites
