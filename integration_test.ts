@@ -121,11 +121,11 @@ const kTestInputs = [
     '7/8/2020',
     'Memory',
     [
-      'https://github.com/flutter/flutter/commit/a9ea825abf50b60bed5ec9b218d9f4cb1a2f839e',
-      'https://github.com/flutter/flutter/commit/5969eb60ec267186c2f19d1301741d6d3c1dabc1',
+      'https://github.com/flutter/flutter/pull/61033',
+      'https://github.com/flutter/flutter/pull/61025',
     ].join('\n'),
-    'xyz123@google.com',
     [
+      'xyz123@google.com',
       'abc123@google.com',
       'abc456@google.com',
     ].join('\n'),
@@ -148,8 +148,8 @@ const kTestInputs = [
       'https://github.com/flutter/flutter/commit/3519bec6c4c0ef0025a31fe103ef4d5f4951ab8a',
       'https://github.com/flutter/flutter/commit/20803507fdb1df577bae22d460c39369511d676d',
     ].join('\n'),
-    'y123@google.com',
     [
+      'y123@google.com',
       'j123@google.com',
       'f123@google.com',
       'f456@google.com',
@@ -164,8 +164,8 @@ const kTestInputs = [
     '5/11/2020',
     'App size',
     'https://github.com/flutter/website/commit/1f62b1f3a4ece28fff92c1513194ad77ab7c1df7',
-    'm123@google.com',
     [
+      'm123@google.com',
       'x123@google.com',
       'd123@google.com',
       's123@google.com',
@@ -183,8 +183,8 @@ const kTestInputs = [
       'https://github.com/flutter/engine/commit/21875230932ffeb87a9098ff97bf129fd804e3ac',
       'https://github.com/flutter/engine/commit/ede658e2d1e976152370f404b6cff874f42a6611',
     ].join('\n'),
-    'k123@google.com',
     [
+      'k123@google.com',
       'a123@google.com',
       'a456@google.com',
       'l123@google.com',
@@ -202,7 +202,6 @@ const kItemTypes = [
   'date',
   'checkbox',
   'paragraph',
-  'text',
   'paragraph',
   'paragraph',
   'text',
