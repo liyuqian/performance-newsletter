@@ -33,6 +33,7 @@ function testShortenCommit(): void {
     'https://github.com/flutter/flutter/commit/a9ea825abf50b60bed5ec9b218d9f4cb1a2f839e': 'a9ea825',
     'https://dart.googlesource.com/sdk/+/5b8c4e8024220c31d4c814f3a74e4c54325bdc33': '5b8c4e8',
     'https://critique-ng.corp.google.com/cl/333841120': 'cl/333841120',
+    'https://github.com/flutter/flutter/pull/73925': 'PR/73925',
   };
   for (var commitUrl in urlToExpectedAnswer) {
     let answer = shortenCommit(commitUrl);
