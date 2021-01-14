@@ -80,6 +80,10 @@ const kCommitShorteners: UrlRegexShortener[] = [
     '.*cl\/([0-9]+)',
     (m: RegExpMatchArray) => `cl/${m[1]}`,
   ),
+  new UrlRegexShortener(
+    '.*github\.com\/.*\/.*\/pull\/([0-9]+)',
+    (m: RegExpMatchArray) => `PR/${m[1]}`,
+  ),
 ];
 
 // Regex pattern that matches multiple lines of some url patterns.
