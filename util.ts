@@ -8,8 +8,7 @@ export {
   kColLandDate,
   kColPerfArea,
   kColCommits,
-  kColFirstAuthor,
-  kColOtherAuthors,
+  kColContributors,
   kColIssues,
   kColDocLink,
   kColIsQuantified,
@@ -51,14 +50,13 @@ const kColShortDescription = 1;
 const kColLandDate = 2;
 const kColPerfArea = 3;
 const kColCommits = 4;
-const kColFirstAuthor = 5;
-const kColOtherAuthors = 6;
-const kColIssues = 7;
-const kColDocLink = 8;
-const kColIsQuantified = 9;
-const kColOldMetric = 10;
-const kColNewMetric = 11;
-const kColUnit = 12;
-const kColMetricDescription = 13;
-const kColMetricLink = 14;
-const kColCount = 15;
+const kColContributors = 5;
+const kColIssues = 6;
+const kColDocLink = 7;
+const kColIsQuantified = 8;
+const kColOldMetric = 9;
+const kColNewMetric = 10;
+const kColUnit = 11;
+const kColMetricDescription = 12;
+const kColMetricLink = 13;
+const kColCount = 14;

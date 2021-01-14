@@ -15,8 +15,7 @@ import {
   kColLandDate,
   kColPerfArea,
   kColCommits,
-  kColFirstAuthor,
-  kColOtherAuthors,
+  kColContributors,
   kColIssues,
   kColDocLink,
   kColIsQuantified,
@@ -121,8 +120,7 @@ class FormResponse {
   landDate: string;
   perfArea: string;
   commits: string[];
-  firstAuthor: string;
-  otherAuthors: string[];
+  contributors: string[];
   issues: string[];
   docLink: string;
   isQuantified: boolean;
@@ -142,8 +140,7 @@ class FormResponse {
     this.landDate = row[kColLandDate];
     this.perfArea = row[kColPerfArea];
     this.commits = splitLines(row[kColCommits]);
-    this.firstAuthor = row[kColFirstAuthor];
-    this.otherAuthors = splitLines(row[kColOtherAuthors]);
+    this.contributors = splitLines(row[kColContributors]);
     this.issues = splitLines(row[kColIssues]);
     this.docLink = row[kColDocLink];
     this.isQuantified = (row[kColIsQuantified] == 'Yes');
@@ -246,9 +243,8 @@ function appendAuthors(
   highlighted = true,
 ): void {
   listItem.appendText('\n');
-  let allAuthors = [formResponse.firstAuthor].concat(formResponse.otherAuthors);
-  let shortenedAuthors = allAuthors.map(trimAt);
-  let authorsText = listItem.appendText(shortenedAuthors.join(', '));
+  let shortenedContributors = formResponse.contributors.map(trimAt);
+  let authorsText = listItem.appendText(shortenedContributors.join(', '));
   authorsText.setItalic(true);
   if (highlighted) {
     authorsText.setBackgroundColor('#e2edff');

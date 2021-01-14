@@ -66,21 +66,14 @@ function addGeneralSection(
   commitsText.setValidation(commitsTextValidation.build());
   commitsText.setRequired(true);
 
-  logItem('first author', counter);
-  let firstAuthor = form.addTextItem();
-  firstAuthor.setTitle(
-    'Who is the main author of this improvement? Please enter an email or a ' +
-    'Github id.',
-  );
-  firstAuthor.setRequired(true);
-
-  logItem('other authors', counter);
-  let otherAuthors = form.addParagraphTextItem();
-  otherAuthors.setTitle(
-    'Who are other contributors (code authors, code reviewers, issue ' +
+  logItem('contributors', counter);
+  let contributors = form.addParagraphTextItem();
+  contributors.setTitle(
+    'Who are contributors (code authors, code reviewers, issue ' +
     'reporters, etc.) to this improvement? Please enter one email or Github '+
     'id per line.',
   );
+  contributors.setRequired(true);
 
   logItem('issues', counter);
   let issuesText = form.addParagraphTextItem();
