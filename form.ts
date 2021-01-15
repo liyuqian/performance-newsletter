@@ -4,6 +4,7 @@ import {
   kIssuesRegex,
   kNewsletterFolderId,
   kPerfAreas,
+  kQuantifiedSectionDescription,
 } from "./config";
 
 import { kColCount, kFormIdKey, kSpreadsheetIdKey, moveFile } from "./util";
@@ -113,6 +114,7 @@ function addQuantifiedSection(
 ): void {
   let pageBreak = form.addPageBreakItem();
   pageBreak.setTitle('Quantified improvement');
+  pageBreak.setHelpText(kQuantifiedSectionDescription);
 
   logItem('old metric', counter);
   let oldMetric = form.addTextItem();
