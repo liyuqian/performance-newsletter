@@ -9,6 +9,7 @@ export {
   kCommitsRegex,
   kCanonicalAt,
   kFormDescription,
+  kQuantifiedSectionDescription,
   kPerfAreas,
 };
 
@@ -103,5 +104,9 @@ const kFormDescription =
   'Please fill out the details about the performance improvement you\'ve ' +
   'made and we\'ll generate the newsletter accordingly. If there are ' +
   'multiple improvements, please fill out this form multiple times.';
+
+const kQuantifiedSectionDescription =
+  'If there are many metrics associated with this improvement, please input ' +
+  'one representative metric below, and leave others in the design doc.';
 
 const kPerfAreas = ['Speed', 'Memory', 'App size', 'Energy'];
