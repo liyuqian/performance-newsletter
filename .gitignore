@@ -2,3 +2,4 @@ node_modules
 secret
 .clasprc.json
 .clasp.json
+stderr.log

@@ -5,8 +5,8 @@ COMMANDS=(
   'sudo npm install -g @google/clasp'
   'npm i -S @types/google-apps-script'
   'clasp push'
-  'clasp run runAllUnitTests'
-  'clasp run runAllIntegrationTests'
+  'bash check_clasp_run.sh runAllUnitTests'
+  'bash check_clasp_run.sh runAllIntegrationTests'
 )
 
 for ((i = 0; i < ${#COMMANDS[@]}; i += 1))
