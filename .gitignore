@@ -2,4 +2,6 @@ node_modules
 secret
 .clasprc.json
 .clasp.json
+.clasp.*.json
 stderr.log
+test.md

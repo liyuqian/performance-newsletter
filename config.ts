@@ -11,6 +11,8 @@ export {
   kFormDescription,
   kQuantifiedSectionDescription,
   kPerfAreas,
+  kMarkdownInputDocId,
+  kAuthorMapId,
 };
 
 // The Google drive folder id to host all performance newsletter related docs,
@@ -28,6 +30,18 @@ const kGoldNewsletterPdfId = '1wUX0Jw_0K4YpaKPv8EUydGRMJTWUp7IB';
 // For example, 'liyuqian@google.com' to 'liyuqian@', and 'liyuqian@google'
 // to 'liyuqian@'.
 const kCanonicalAt = /@google(.com)?/;
+
+// The performance newsletter Google doc id to be converted to markdown.
+//
+// See also `convertToMarkdown` function in markdown.ts.
+const kMarkdownInputDocId = '1NuPNcgMSQhBvNw8YrkqQfvK_r5AgRE4a3a7MSNVpnVo';
+
+// A spreadsheet that maps some user names (in column A) to public Github user
+// names (in column B). The column A should not have `@` appended to the user
+// name.
+//
+// See also `convertToMarkdown` function in markdown.ts.
+const kAuthorMapId = '1_wb3QJdJSVmblq-tcQPU1D4TUe42DRFCqhjBerkNjSY';
 
 // A class that shortens a full URL that matches a pattern.
 export class UrlRegexShortener {
